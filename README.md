@@ -18,7 +18,7 @@ HC-06 Bluetooth Module
 
 ---------------------------------------------------------------------
 
-How the system works.
+How the system works:
 
 DISARMED STATE
 1. Default state and also enabled when entering a valid pass code followed by the 'D' key
