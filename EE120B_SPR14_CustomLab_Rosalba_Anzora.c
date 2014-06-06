@@ -384,7 +384,7 @@ int main()
 	// Keypad Pins (C0-C3 input, C4-C7 output)
 	DDRC = 0xF0; PORTC = 0x0F;
 	// Pin D0 input from sensor, Pin D2(RX, input) gets TX from BT Module, 
-	// Pin D3(TX, output)s TX from BT Module
+	// Pin D3(TX, output)s TX from BT Module, Pin D7 outputs to RGB LED
 	DDRD = 0x88; PORTD = 0x77;
 
 	//----------------------------------
