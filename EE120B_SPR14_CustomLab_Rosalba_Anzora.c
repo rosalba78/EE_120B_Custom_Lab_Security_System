@@ -25,14 +25,14 @@ void set_PWM(double frequency) {
 		if (!frequency) { TCCR2B &= 0x08; } //stops timer/counter
 		else { TCCR2B |= 0x03; } // resumes/continues timer/counter
 		
-		// prevents OCR3A from overflowing, using prescaler 64
+		// prevents OCR2A from overflowing, using prescaler 64
 		// 0.954 is smallest frequency that will not result in overflow
 		if (frequency < 0.954) { OCR2A = 0xFFFF; }
 		
-		// prevents OCR3A from underflowing, using prescaler 64					// 31250 is largest frequency that will not result in underflow
+		// prevents OCR2A from underflowing, using prescaler 64					// 31250 is largest frequency that will not result in underflow
 		else if (frequency > 31250) { OCR2A = 0x0000; }
 		
-		// set OCR3A based on desired frequency
+		// set OCR2A based on desired frequency
 		else { OCR2A = (short)(8000000 / (128 * frequency)) - 1; }
 
 		TCNT2 = 0; // resets counter
@@ -41,11 +41,11 @@ void set_PWM(double frequency) {
 }
 
 void PWM_on() {
-	TCCR2A = (1 << COM3A0);
-	// COM3A0: Toggle PB6 on compare match between counter and OCR3A
-	TCCR2B = (1 << WGM32) | (1 << CS31) | (1 << CS30);
-	// WGM32: When counter (TCNT3) matches OCR3A, reset counter
-	// CS31 & CS30: Set a prescaler of 64
+	TCCR2A = (1 << COM2A0);
+	// COM2A0: Toggle PD7 on compare match between counter and OCR3A
+	TCCR2B = (1 << WGM22) | (1 << CS21) | (1 << CS20);
+	// WGM22: When counter (TCNT3) matches OCR2A, reset counter
+	// CS21 & CS20: Set a prescaler of 64
 	set_PWM(0);
 }
 
@@ -283,14 +283,16 @@ int RGB_Freq(int state){
 		case armed_blink_off:
 			if(movement){
 				state = armed_blink_on;
-				}else if(!arm){
+			}else if(!arm){
 				state = disarmed;
+			}else if(!movement && arm){
+				state = armed_blink_off;
 			}
 			break;
 		case armed_blink_on:
-			if(movement){
+			if(arm){
 				state = armed_blink_on;
-				}else if(!arm){
+			}else if(!arm){
 				state = disarmed;
 			}
 			break;
